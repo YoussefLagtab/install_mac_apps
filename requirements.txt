@@ -1,0 +1,4 @@
+mongodb-compass:https://downloads.mongodb.com/compass/mongodb-compass-1.28.4-darwin-x64.dmg
+discord:https://dl.discordapp.net/apps/osx/0.0.263/Discord.dmg
+vscode:https://az764295.vo.msecnd.net/stable/e7d7e9a9348e6a8cc8c03f877d39cb72e5dfb1ff/VSCode-darwin-universal.zip
+spotify:https://download.scdn.co/SpotifyInstaller.zip

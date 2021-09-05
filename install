@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+
+set -e
+
+# helpers
+function install_dmg() {
+	app=$1;
+	app_dmg=$2;
+
+	mount_output=`hdiutil mount "$app_dmg"`;
+	
+	app_folder=`echo $mount_output | grep -o /Volumes.*`;
+		
+	mount_point=`echo $mount_output | grep -o /dev/\[a-z0-9\]*`;
+	mount_point=`echo $mount_point | cut -d' ' -f2`;
+	
+	echo * copying *;
+	cp -R "$app_folder"/*.app "$app";
+
+	hdiutil unmount "$mount_point";
+}
+
+function install_zip() {
+	app=$1;
+	app_zip=$2;
+
+	unzip "$app_zip" -d "$app.backup";
+	mv "$app.backup"/* "$app";
+	rm -fr "$app.backup";
+}
+
+
+function install_app() {
+	url=$2;
+	package_type=${url##*.}
+	app_pkg="$download_folder/$1.$package_type";
+	app="$applications_folder/$1.app";
+
+
+	if [ ! -d "$app" ]
+	then
+		echo - Installing \|$app\| FROM \|$url\|;
+		
+		curl -L "$url" > "$app_pkg";
+		
+		if [ $package_type == 'dmg' ]; then install_dmg "$app" "$app_pkg";
+		elif [ $package_type == 'zip' ]; then install_zip "$app" "$app_pkg";
+		else echo Unsupperted package type;
+		fi;
+
+		rm "$app_pkg"
+	fi;
+}
+
+
+# vars
+prefix=~/goinfre;
+applications_folder="$prefix/Applications";
+download_folder="$applications_folder/.downloads";
+requirements=./requirements.txt;
+
+mkdir -p $download_folder;
+
+# main
+for req in `cat $requirements`;	
+do
+	app_name=`echo $req | cut -d\: -f1`;
+	app_url=`echo $req | cut -d\: -f2-`;
+	install_app "$app_name" "$app_url";
+done
+
+
