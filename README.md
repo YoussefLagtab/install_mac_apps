@@ -5,7 +5,7 @@ a small script to install some needed apps on the school (1337) iMac
 
 * currently only .zip and .dmg packages are supported.
 
-* requirements:
+* add a package:
 
-add a line for each package to be installed to the file `requirements.txt` with the following:
+add a line for each package to be installed to the file `requirements.txt` with the following:\n
 `<app_name>:<package_download_url>`
